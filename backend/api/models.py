@@ -13,7 +13,7 @@ class UserProfile(AbstractUser):
 class File(models.Model):
     owner = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='files')
     filename = models.CharField(max_length=255)
-    content = models.TextField()
+    content = models.FileField(upload_to='cloud/')  # Store files in 'cloud' directory
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

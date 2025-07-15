@@ -10,6 +10,11 @@ class UserProfileAdmin(UserAdmin):
     search_fields = ('username', 'email', 'fullname')
     ordering = ('username',)
 
-
+class FileAdmin(admin.ModelAdmin):
+    model = File
+    list_display = ('owner', 'filename', 'content', 'created_at')
+    search_fields = ('filename',)
+    ordering = ('-created_at',)
 
 admin.site.register(UserProfile, UserProfileAdmin)
+admin.site.register(File, FileAdmin)
