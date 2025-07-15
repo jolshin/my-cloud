@@ -40,8 +40,6 @@ function Home() {
         api
             .get(`/api/files/download/${id}/`, { responseType: 'arraybuffer' })
             .then((res) => {
-                console.log(res);
-                // window.open(res.data.content, "download");
                 const url = window.URL.createObjectURL(new Blob([res.data]))
                 const link = document.createElement('a')
                 link.href = url

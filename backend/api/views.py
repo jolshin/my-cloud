@@ -45,29 +45,12 @@ class FileDelete(generics.DestroyAPIView):
 
         return queryset
     
-# class FileDownload(generics.RetrieveAPIView):
-#     serializer_class = FileSerializer
-#     permission_classes = [IsAuthenticated]  # Only authenticated users can download files
-
-#     def get_queryset(self):
-#         queryset = File.objects.all()
-#         user = self.request.user
-
-#         if not user.is_superuser:
-#             queryset = queryset.filter(
-#                 owner=user
-#             )
-
-#         return queryset
-
 class FileDownload(generics.RetrieveAPIView):
     serializer_class = FileSerializer
     permission_classes = [IsAuthenticated]  # Only authenticated users can download files
 
     def get(self, request, pk):
         file_instance = get_object_or_404(File, pk=pk)
-        print(file_instance.owner)
-        print(self.request.user)
         if request.user != file_instance.owner and not request.user.is_superuser:
             return HttpResponseForbidden("You do not have permission to download this file.")
 
