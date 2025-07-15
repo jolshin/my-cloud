@@ -5,13 +5,24 @@ from .serializers import FileSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .models import File, UserProfile
 
+from django.http import HttpResponse, HttpResponseForbidden
+from django.views import View
+from django.shortcuts import get_object_or_404
+
 class FileListCreate(generics.ListCreateAPIView):
     serializer_class = FileSerializer
     permission_classes = [IsAuthenticated]  # Only authenticated users can access this view
 
     def get_queryset(self):
+        queryset = File.objects.all()
         user = self.request.user
-        return File.objects.filter(owner=user)  # Return notes only for the authenticated user
+
+        if not user.is_superuser:
+            queryset = queryset.filter(
+                owner=user
+            )
+
+        return queryset
     
     def perform_create(self, serializer):
         if serializer.is_valid():
@@ -24,22 +35,46 @@ class FileDelete(generics.DestroyAPIView):
     permission_classes = [IsAuthenticated]  # Only authenticated users can delete notes
 
     def get_queryset(self):
+        queryset = File.objects.all()
         user = self.request.user
-        return File.objects.filter(owner=user)  # Return notes only for the authenticated user
+
+        if not user.is_superuser:
+            queryset = queryset.filter(
+                owner=user
+            )
+
+        return queryset
     
+# class FileDownload(generics.RetrieveAPIView):
+#     serializer_class = FileSerializer
+#     permission_classes = [IsAuthenticated]  # Only authenticated users can download files
+
+#     def get_queryset(self):
+#         queryset = File.objects.all()
+#         user = self.request.user
+
+#         if not user.is_superuser:
+#             queryset = queryset.filter(
+#                 owner=user
+#             )
+
+#         return queryset
+
 class FileDownload(generics.RetrieveAPIView):
     serializer_class = FileSerializer
     permission_classes = [IsAuthenticated]  # Only authenticated users can download files
 
-    def get_queryset(self):
-        user = self.request.user
-        return File.objects.filter(owner=user)  # Return files only for the authenticated user
-    
-    def retrieve(self, request, *args, **kwargs):
-        instance = self.get_object()
-        response = super().retrieve(request, *args, **kwargs)
-        response['Content-Disposition'] = f'attachment; filename="{instance.filename}"'
+    def get(self, request, pk):
+        file_instance = get_object_or_404(File, pk=pk)
+        print(file_instance.owner)
+        print(self.request.user)
+        if request.user != file_instance.owner and not request.user.is_superuser:
+            return HttpResponseForbidden("You do not have permission to download this file.")
+
+        response = HttpResponse(file_instance.content, content_type='application/octet-stream')
+        response['Content-Disposition'] = f'attachment; filename="{file_instance.filename}"'
         return response
+    
 
 class CreateUserView(generics.CreateAPIView):
     queryset = UserProfile.objects.all()
