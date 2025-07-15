@@ -148,3 +148,7 @@ CORS_ALLOW_ALL_ORIGINS = True  # Allow all origins for development; adjust in pr
 CORS_ALLOW_CREDENTIALS = True  # Allow credentials for CORS requests
 
 AUTH_USER_MODEL = 'api.UserProfile'  # Custom user model
+
+MEDIA_ROOT = os.path.join(BASE_DIR / 'media')  # Directory to store uploaded files
+
+MEDIA_URL = '/media/'
