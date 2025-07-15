@@ -38,14 +38,17 @@ function Home() {
 
     const downloadFile = (id, filename) => {
         api
-            .get(`/api/files/download/${id}/`, { responseType: '' })
+            .get(`/api/files/download/${id}/`, { responseType: 'arraybuffer' })
             .then((res) => {
-                const url =res.data.content;
-                const link = document.createElement("a");
-                link.href = url;
-                link.setAttribute("download", filename); // or use the actual filename
-                document.body.appendChild(link);
-                link.click();
+                console.log(res);
+                // window.open(res.data.content, "download");
+                const url = window.URL.createObjectURL(new Blob([res.data]))
+                const link = document.createElement('a')
+                link.href = url
+                link.setAttribute('download', filename)
+                document.body.appendChild(link)
+                link.click()
+
             })
             .catch((error) => alert(error));
     }
