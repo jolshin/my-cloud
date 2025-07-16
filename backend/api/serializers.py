@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import File, UserProfile
+import os
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -19,6 +20,11 @@ class UserSerializer(serializers.ModelSerializer):
         user.save()
         return user
     
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        ret['id'] = instance.username
+        return ret 
+    
 class FileSerializer(serializers.ModelSerializer):
     class Meta:
         model = File
@@ -27,4 +33,10 @@ class FileSerializer(serializers.ModelSerializer):
             'owner': {'read_only': True},
         }
 
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        ret['content'] = os.path.basename(ret['content']) if ret['content'] else None
+        ret['owner'] = UserSerializer(instance.owner).data['username'] if instance.owner else None
+        
+        return ret
 

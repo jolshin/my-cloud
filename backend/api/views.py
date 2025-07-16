@@ -9,6 +9,9 @@ from django.http import HttpResponse, HttpResponseForbidden
 from django.views import View
 from django.shortcuts import get_object_or_404
 
+from wsgiref.util import FileWrapper
+import os
+
 class FileListCreate(generics.ListCreateAPIView):
     serializer_class = FileSerializer
     permission_classes = [IsAuthenticated]  # Only authenticated users can access this view
@@ -54,9 +57,12 @@ class FileDownload(generics.RetrieveAPIView):
         if request.user != file_instance.owner and not request.user.is_superuser:
             return HttpResponseForbidden("You do not have permission to download this file.")
 
-        response = HttpResponse(file_instance.content, content_type='application/octet-stream')
-        response['Content-Disposition'] = f'attachment; filename="{file_instance.filename}"'
-        return response
+        with open(file_instance.content.path, 'rb') as f:
+            wrapper = FileWrapper(f)
+            response = HttpResponse(wrapper, content_type='application/octet-stream')
+            response['Content-Disposition'] = f'attachment; filename="{file_instance.filename}"'
+            response['Content-Length'] = os.path.getsize(file_instance.content.path)
+            return response
     
 
 class CreateUserView(generics.CreateAPIView):
