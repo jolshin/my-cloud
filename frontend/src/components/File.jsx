@@ -7,7 +7,6 @@ function File({ file, onDelete, onDownload }) {
   return (
     <div className="file-container">
       <p className="file-name">{file.filename}</p>
-      <p className="file-content">{file.content}</p>
       <p className="file-date">
         {new Date(file.created_at).toLocaleDateString("en-US", {
           year: "numeric",
