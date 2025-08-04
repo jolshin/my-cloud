@@ -12,6 +12,13 @@ from django.shortcuts import get_object_or_404
 from wsgiref.util import FileWrapper
 import os
 
+
+
+class CreateUserView(generics.CreateAPIView):
+    queryset = UserProfile.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [AllowAny]  # Allow any user to create an account
+
 class FileListCreate(generics.ListCreateAPIView):
     serializer_class = FileSerializer
     permission_classes = [IsAuthenticated]  # Only authenticated users can access this view
@@ -48,7 +55,7 @@ class FileDelete(generics.DestroyAPIView):
 
         return queryset
     
-class FileDownload(generics.RetrieveAPIView):
+class FileDownload(generics.RetrieveUpdateAPIView):
     serializer_class = FileSerializer
     permission_classes = [IsAuthenticated]  # Only authenticated users can download files
 
@@ -63,10 +70,64 @@ class FileDownload(generics.RetrieveAPIView):
             response['Content-Disposition'] = f'attachment; filename="{file_instance.filename}"'
             response['Content-Length'] = os.path.getsize(file_instance.content.path)
             return response
-    
+        
+    def get_object(self):
+        pk = self.kwargs['pk']
+        return get_object_or_404(File, pk=pk, share_link__isnull=False)
 
-class CreateUserView(generics.CreateAPIView):
-    queryset = UserProfile.objects.all()
-    serializer_class = UserSerializer
-    permission_classes = [AllowAny]  # Allow any user to create an account
+class ShareFileDownload(generics.RetrieveUpdateAPIView):
+    serializer_class = FileSerializer
+    permission_classes = [AllowAny]  # Allow any user to download shared files
+
+    def get(self, request, *args, **kwargs):
+        file_instance = get_object_or_404(File, pk=self.kwargs['pk'])
+
+        if file_instance.share_link is None:
+            return HttpResponseForbidden("This file is not shared publicly.")
+        # If the file is shared, allow download
+        with open(file_instance.content.path, 'rb') as f:
+            wrapper = FileWrapper(f)
+            response = HttpResponse(wrapper, content_type='application/octet-stream')
+            response['Content-Disposition'] = f'attachment; filename="{file_instance.filename}"'
+            response['Content-Length'] = os.path.getsize(file_instance.content.path)
+            return response
+        
+    def get_object(self):
+        pk = self.kwargs['pk']
+        return get_object_or_404(File, pk=pk, share_link__isnull=False)
+        
+class ShareFileList(generics.RetrieveAPIView):
+    serializer_class = FileSerializer
+    permission_classes = [AllowAny]
+
+    def get_object(self):
+        pk = self.kwargs['pk']
+        # If the file is shared, return the file instance
+        file_instance = get_object_or_404(File, pk=pk)
+        if file_instance.share_link is None:
+            return HttpResponseForbidden("This file is not shared publicly.")
+        return get_object_or_404(File, pk=pk)
+    
+        
+class UpdateFileEntry(generics.UpdateAPIView):
+    serializer_class = FileSerializer
+    permission_classes = [IsAuthenticated]
+    
+    lookup_field = 'pk'
+
+    def get_queryset(self):
+        queryset = File.objects.all()
+        user = self.request.user
+
+        if not user.is_superuser:
+            queryset = queryset.filter(
+                owner=user
+            )
+
+        return queryset
+
+
+
+
+
 

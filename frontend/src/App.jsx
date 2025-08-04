@@ -4,6 +4,7 @@ import Home from './pages/Home'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import NotFound from './pages/NotFound'
+import Share from './pages/Share'
 import ProtectedRoute from './components/ProtectedRoute'
 
 function Logout() {
@@ -24,6 +25,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/register" element={<RegisterAndLogout />} />
+        <Route path="/share/:id" element={<Share />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

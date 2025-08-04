@@ -5,7 +5,7 @@ import os
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
-        fields = ['id', 'username', 'email', 'password', 'fullname']
+        fields = ['id', 'username', 'email', 'password', 'fullname', 'storage', 'last_login']
         extra_kwargs = {
             'password': {'write_only': True}
         }
@@ -28,7 +28,7 @@ class UserSerializer(serializers.ModelSerializer):
 class FileSerializer(serializers.ModelSerializer):
     class Meta:
         model = File
-        fields = ['id', 'owner', 'filename', 'content', 'created_at']
+        fields = ['id', 'owner', 'filename', 'content', 'created_at', 'share_link', 'filepath', 'size', 'last_downloaded', 'description']
         extra_kwargs = {
             'owner': {'read_only': True},
         }

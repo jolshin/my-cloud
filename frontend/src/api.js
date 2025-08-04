@@ -23,5 +23,10 @@ api.interceptors.request.use(
         return Promise.reject(error);
     }
 );
+ 
+
+export const shareApi = axios.create({
+    baseURL: import.meta.env.VITE_API_URL,
+});
 
 export default api;
