@@ -45,3 +45,55 @@
 .download-button:hover {
   background-color: #1976d2; /* Darker blue */
 }
+
+.share-button {
+  background-color: #4caf50; /* Green */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.share-button:hover {
+  background-color: #388e3c; /* Darker green */
+}
+
+.unshare-button {
+  background-color: #ff9800; /* Orange */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.unshare-button:hover {
+  background-color: #f57c00; /* Darker orange */
+}
+
+.copy-link-button {
+  background-color: #9c27b0; /* Purple */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.copy-link-button:hover {
+  background-color: #7b1fa2; /* Darker purple */
+}
+
+.rename-button {
+  background-color: #3f51b5; /* Indigo */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.rename-button:hover {
+  background-color: #303f9f; /* Darker indigo */
+}
