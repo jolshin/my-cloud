@@ -15,9 +15,10 @@ class UserProfile(AbstractUser):
     fullname = models.CharField(max_length=255, blank=False)
     storage = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)  # Unique storage identifier
     last_login = models.DateTimeField(auto_now=True)  # Track last login time
+    is_staff = models.BooleanField(default=False)  # Admin flag
 
     def __str__(self):
-        return self.fullname
+        return self.username
 
 class File(models.Model):
     owner = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='files')
@@ -26,8 +27,9 @@ class File(models.Model):
     filepath = models.CharField(max_length=255, blank=True, null=True)  # Path to the file
     content = models.FileField(upload_to=upload_path)  # Store files in 'cloud' directory
     created_at = models.DateTimeField(auto_now_add=True)
-    size = models.PositiveIntegerField(default=0)  # Store file size in bytes
-    last_downloaded = models.DateTimeField(auto_now=True)  # Track last download time
+    size = models.CharField(max_length=255, blank=True, null=True) # Store file size 
+    byte_size = models.BigIntegerField(blank=True, null=True)  # Store file size in bytes
+    last_downloaded = models.DateTimeField(blank=True, null=True)  # Track last download time
     description = models.TextField(blank=True, null=True)  # Optional description field
 
     def __str__(self):
@@ -38,6 +40,4 @@ class File(models.Model):
             if os.path.exists(os.path.join(settings.MEDIA_ROOT, self.content.name)):
                 self.content.delete(save=False)
         super(File, self).delete()
-        
 
- 

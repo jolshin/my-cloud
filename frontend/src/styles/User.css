@@ -1,0 +1,4 @@
+.user-container {
+  border-bottom: 1px solid var(--secondary-color);
+  padding: 0.625em;
+}

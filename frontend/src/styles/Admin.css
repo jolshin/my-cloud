@@ -1,0 +1,50 @@
+#admin-panel {
+  background-color: var(--primary-color);
+  border-bottom: 1px solid var(--hover-color);
+  position: absolute;
+  top: 0;
+  right: -100%;
+  height: 100vh;
+  width: min(30em, 100%);
+  z-index: 5;
+  border-left: 1px solid var(--hover-color);
+  transition: right 300ms ease-out;
+  padding-left: 2.5em;
+  padding-right: 2.5em;
+}
+
+#admin-panel.show {
+  right: 0;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+#admin-panel.show ~ #overlay {
+  display: block;
+}
+
+#hide-admin-panel {
+  color: var(--text-color);
+  display: inline-block;
+  background: none;
+  border: none;
+  padding: 1em;
+  margin-left: auto;
+  cursor: pointer;
+}
+
+.user-container {
+  padding-bottom: 20px;
+}
+
+.left {
+  float: left;
+}
+
+.right {
+  float: right;
+}
+
+.add-button-container {
+  padding: 0.625em;
+}

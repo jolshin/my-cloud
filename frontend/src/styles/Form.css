@@ -1,36 +1,80 @@
+.form-wrapper {
+  padding-top: 2vh;
+  margin: auto;
+  width: 400px;
+}
+
+.form-header {
+  padding-left: 0.5vw;
+  font-size: xx-large;
+}
+
 .form-container {
-  display: flex;
-  flex-direction: column;
+  overflow: hidden;
+}
+
+#upload-form, #register-form, #lookup-form {
   align-items: center;
   justify-content: center;
-  margin: 50px auto;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin: 5px auto;
+  padding: 5px;
   max-width: 400px;
+  margin-top: -100%;
+  transition: all 1s;
 }
 
-.form-input {
-  width: 90%;
-  padding: 10px;
-  margin: 10px 0;
-  border: 1px solid #ccc;
+
+#upload-form.show, #register-form.show, #lookup-form.show {
+  margin-top: 0;
+}
+
+form h2 {
+  color: #333;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+form label {
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+form input,
+form textarea {
+  width: 100%;
+  border: 0;
   border-radius: 4px;
   box-sizing: border-box;
+  background-color: var(--secondary-color);
+  color: var(--text-color);
 }
 
-.form-button {
-  width: 95%;
-  padding: 10px;
-  margin: 20px 0;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
+form input[type="submit"] {
+  margin-left: 5px;
+  background-color: var(--text-color);
+  border: 0;
+  border-radius: 5px;
+  color: var(--primary-color);
 }
 
-.form-button:hover {
-  background-color: #0056b3;
+form input[type="submit"]:hover {
+  background-color: var(--button-hover-color);
+}
+
+form input::file-selector-button {
+  margin-left: 5px;
+  background-color: var(--text-color);
+  padding: 0.5vw;
+  margin: 5px;
+  border: 0;
+  border-radius: 5px;
+  color: var(--primary-color);
+}
+
+form input::file-selector-button:hover {
+  background-color: var(--button-hover-color);
+}
+
+form input::placeholder {
+  color: var(--text-color);
 }

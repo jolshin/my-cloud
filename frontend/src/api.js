@@ -12,7 +12,6 @@ api.interceptors.request.use(
         config.headers.Authorization = `Bearer ${token}`;
         }
 
-        // Add trailing slash if not provided
         if (config.url[config.url.length-1] !== '/') {
             config.url += '/';
         }

@@ -1,9 +1,7 @@
-  const getFiles = () => {
-    api
-      .get("/api/files/")
-      .then((res) => res.data)
-      .then((data) => {
-        setFiles(data);
-      })
-      .catch((error) => alert(error));
-  };
+import api from "../api";
+
+export default async function GetFiles(storageOwnerId) {
+  const res = await api
+        .get(`/api/user/store/${storageOwnerId}/`);
+    return res.data;
+}

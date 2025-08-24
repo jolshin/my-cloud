@@ -1,0 +1,62 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&display=swap");
+
+:root {
+  --primary-color: #11121a;
+  --secondary-color: #202231;
+  --hover-color: #272832;
+  --button-hover-color: #8b8b8b;
+  --accent-color: #0071ff;
+  --text-color: #c9c9c9;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  color: var(--text-color);
+  font-family: "Roboto Flex", sans-serif;
+  font-weight: 100;
+}
+
+.mox {
+  background-image: linear-gradient(
+    to bottom right,
+    #ff4545,
+    #00ff99,
+    #006aff,
+    #ff0095,
+    #ff4545
+  );
+  color: transparent;
+  background-clip: text;
+}
+
+body {
+  width: 100%;
+  background-color: var(--primary-color);
+}
+
+main {
+  padding: 0.825em;
+}
+
+.awesome_icon {
+  color: var(--primary-color);
+}
+
+.welcome-wrapper {
+  margin: 20% auto;
+  max-width: 500px;
+  text-align: center;
+}
+
+.welcome-wrapper span {
+  font-size: x-large;
+}
+
+.welcome-wrapper p {
+  font-size: 200px;
+}

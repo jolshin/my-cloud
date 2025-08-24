@@ -5,7 +5,7 @@ import os
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
-        fields = ['id', 'username', 'email', 'password', 'fullname', 'storage', 'last_login']
+        fields = ['id', 'username', 'email', 'password', 'fullname', 'storage', 'last_login', 'is_staff']
         extra_kwargs = {
             'password': {'write_only': True}
         }
@@ -22,13 +22,12 @@ class UserSerializer(serializers.ModelSerializer):
     
     def to_representation(self, instance):
         ret = super().to_representation(instance)
-        ret['id'] = instance.username
         return ret 
     
 class FileSerializer(serializers.ModelSerializer):
     class Meta:
         model = File
-        fields = ['id', 'owner', 'filename', 'content', 'created_at', 'share_link', 'filepath', 'size', 'last_downloaded', 'description']
+        fields = ['id', 'owner', 'filename', 'content', 'created_at', 'share_link', 'filepath', 'byte_size', 'last_downloaded', 'description']
         extra_kwargs = {
             'owner': {'read_only': True},
         }
@@ -39,4 +38,6 @@ class FileSerializer(serializers.ModelSerializer):
         ret['owner'] = UserSerializer(instance.owner).data['username'] if instance.owner else None
         
         return ret
+    
+
 
