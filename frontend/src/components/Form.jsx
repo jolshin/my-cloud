@@ -6,12 +6,11 @@ import "../styles/Form.css";
 import Header from "./Header";
 import Loading from "./Loading";
 import RegisterForm from "./RegisterForm";
+import ErrorHandler from "../utils/ErrorHandler";
 
 function Form({ route, method }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("");
-  const [fullname, setFullname] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -24,9 +23,7 @@ function Form({ route, method }) {
     try {
       const res = await api.post(route, {
         username,
-        password,
-        email,
-        fullname,
+        password
       });
       
         localStorage.setItem(ACCESS_TOKEN, res.data.access);
@@ -42,9 +39,7 @@ function Form({ route, method }) {
         navigate("/home");
       
     } catch (error) {
-      alert(
-        "Возникла ошибка при обработке запроса. Пожалуйста, проверьте введенные данные и попробуйте еще раз."
-      );
+      ErrorHandler(error)
     } finally {
       setLoading(false);
     }

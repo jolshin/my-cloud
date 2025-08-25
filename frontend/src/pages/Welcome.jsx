@@ -8,7 +8,7 @@ function Welcome() {
         <span>Добро пожаловать!</span>
         <p className="mox">MOX</p>
         <span>Моё облачное хранилище</span><br />
-        <span>загружай, качай и делись</span>
+        <span>загружай, качай, делись</span>
       </div>
     </div>
   );

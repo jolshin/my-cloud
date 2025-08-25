@@ -1,0 +1,34 @@
+.file-container {
+    margin: 20% auto;
+    width: fit-content;
+    min-width: 400px;
+    max-width: 600px;
+    text-align: center;
+}
+.file-container-header {
+    font-size: 22px;
+    margin-bottom: 20px;
+}
+
+.file-name, .file-description, .file-size{
+    width: 100%;
+    height: 40px;
+    line-height: 40px;
+}
+
+.file-size {
+    border-bottom: 1px solid var(--secondary-color);
+    margin-bottom: 20px;
+}
+
+.right {
+    float: right;
+}
+
+.left {
+    float: left;
+}
+
+a:hover {
+  text-decoration: none;
+}

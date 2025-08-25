@@ -2,6 +2,9 @@ import { shareApi } from "../api";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import ErrorHandler from "../utils/ErrorHandler";
+import sizify from "../utils/Sizify";
+import "../styles/Share.css";
 
 function Share() {
   const { id } = useParams();
@@ -21,7 +24,7 @@ function Share() {
       .then((data) => {
         setFile(data);
       })
-      .catch((error) => navigate("/not-found"));
+      .catch(() => navigate("/not-found"));
   };
 
   const downloadFile = () => {
@@ -38,27 +41,33 @@ function Share() {
         shareApi
           .patch(`/api/share/download/${id}/`, { last_downloaded: Date.now })
           .then((res) => {
-            if (res.status === 200) alert("Date updated successfully");
-            else alert("Failed to update date");
+            if (!res.status === 200)
+              alert("Не удалось обновить дату скачивания");
             getFile();
           })
-          .catch((error) => alert(error));
+          .catch((error) => ErrorHandler(error));
       })
-      .catch((error) => alert(error));
+      .catch((error) => ErrorHandler(error));
   };
 
   return (
     <div className="file-container">
-      <p className="file-name">{file.filename}</p>
-      <p className="file-date">
-        {new Date(file.created_at).toLocaleDateString("en-US", {
-          year: "numeric",
-          month: "2-digit",
-          day: "2-digit",
-        })}
-      </p>
+      <a href="/" className="mox">MOX</a>
+      <p className="file-container-header">Скачать файл</p>
+      <div className="file-name">
+        <span className="left">Имя&nbsp;</span>
+        <span className="right">{file.filename}</span>
+      </div>
+      <div className="file-description">
+        <span className="left">Комменатрий&nbsp;</span>
+        <span className="right">{file.description}</span>
+      </div>
+      <div className="file-size">
+        <span className="left">Размер&nbsp;</span>
+        <span className="right">{sizify(file.byte_size)}</span>
+      </div>
       <button className="download-button" onClick={() => downloadFile()}>
-        Download
+        Скачать
       </button>
     </div>
   );

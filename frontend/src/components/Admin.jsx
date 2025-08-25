@@ -4,6 +4,7 @@ import api from "../api";
 import GetUsers from "../services/GetUsers";
 import User from "../components/User";
 import RegisterForm from "./RegisterForm";
+import ErrorHandler from "../utils/ErrorHandler";
 import "../styles/Admin.css";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -30,7 +31,7 @@ function Admin() {
       const data = await GetUsers();
       setUsers(data);
     } catch (error) {
-      alert(error);
+      ErrorHandler(error);
     }
   };
 
@@ -53,7 +54,7 @@ function Admin() {
         else alert("Не удалось удалить пользователя");
         getUsers();
       })
-      .catch((error) => alert(error));
+      .catch((error) => ErrorHandler(error));
   };
 
   const activateIsStaff = (id) => {
@@ -64,7 +65,7 @@ function Admin() {
         else alert("Не удалось активировать права администратора");
         getUsers();
       })
-      .catch((error) => alert(error));
+      .catch((error) => ErrorHandler(error));
   };
 
   const inActivateIsStaff = (id) => {
@@ -75,7 +76,7 @@ function Admin() {
         else alert("Не удалось деактивировать права администратора");
         getUsers();
       })
-      .catch((error) => alert(error));
+      .catch((error) => ErrorHandler(error));
   };
 
   const showHideAdminPanel = () => {
@@ -99,7 +100,7 @@ function Admin() {
     if (regEl.classList.contains("show")) {
       regEl.classList.toggle("show");
     }
-    document.getElementById('lookUpField').value = "";
+    document.getElementById("lookUpField").value = "";
     debounceSearch("");
     lookEL.classList.toggle("show");
     lookEL.classList.toggle("hide");

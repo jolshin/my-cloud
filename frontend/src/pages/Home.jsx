@@ -8,6 +8,7 @@ import Admin from "../components/Admin";
 import Dashboard from "../components/Dashboard";
 import FileListView from "../components/FileListView";
 import UploadForm from "../components/UploadForm";
+import ErrorHandler from "../utils/ErrorHandler";
 import "../styles/Home.css";
 import { useDispatch, useSelector } from "react-redux";
 import { setActiveUser } from "../features/users/user-slice";
@@ -38,7 +39,7 @@ function Home() {
         dispatch(setActiveUser(data));
         dispatch(setActiveStorageOwner(data));
       })
-      .catch((error) => alert(error));
+      .catch((error) => ErrorHandler(error));
   }
 
   useEffect(() => {
@@ -51,7 +52,7 @@ function Home() {
       setFiles(data);
       dispatch(setActiveStorageData(data));
     } catch (error) {
-      alert(error);
+      ErrorHandler(error);
     }
   };
 
@@ -59,7 +60,7 @@ function Home() {
     try {
       const res = await DeleteFile(id);
     } catch (error) {
-      alert(error);
+      ErrorHandler(error);
     }
     getFiles();
   };
@@ -81,7 +82,7 @@ function Home() {
         last_downloaded: new Date(Date.now()).toISOString(),
       });
     } catch (error) {
-      alert(error);
+      ErrorHandler(error);
     }
   };
 
@@ -89,7 +90,7 @@ function Home() {
     try {
       const res = await PatchFile(id, data);
     } catch (error) {
-      alert(error);
+      ErrorHandler(error);
     }
     getFiles();
   };

@@ -1,16 +1,21 @@
 import api from "../api";
 import { useState } from "react";
 import isValid from "../utils/Validation";
+import ErrorHandler from "../utils/ErrorHandler";
 
-export default function RegisterForm({ onGetUsers, styleName="", header="" }) {
+export default function RegisterForm({
+  onGetUsers,
+  styleName = "",
+  header = "",
+}) {
   const [username, setUsername] = useState("");
   const [fullname, setFullname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [passCheck, setPassCheck] = useState("")
+  const [passCheck, setPassCheck] = useState("");
 
   const createUser = (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     if (passCheck !== password) {
       alert("Пароль не совпадает");
@@ -39,40 +44,35 @@ export default function RegisterForm({ onGetUsers, styleName="", header="" }) {
     }
 
     if (!isValid("password", password)) {
-      alert("Пароль некорректен. Длина пароля должна составлять не менее 6 символов, должны присутствовать: одна заглавная буква, одна цифра и один специалный символ.");
+      alert(
+        "Пароль некорректен. Длина пароля должна составлять не менее 6 символов, должны присутствовать: одна заглавная буква, одна цифра и один специалный символ."
+      );
       return;
     }
 
     api
       .post("/api/user/register/", { username, fullname, email, password })
       .then((res) => {
-      if (res.status === 201) {
-        alert("Пользователь создан успешно");
-        setUsername("");
-        setFullname("");
-        setEmail("");
-        setPassword("");
-        setPassCheck("")
-        onGetUsers();
-      
-      } else {
-        alert("Не удалось создать пользователя");
-      }
+        if (res.status === 201) {
+          alert("Пользователь создан успешно");
+          setUsername("");
+          setFullname("");
+          setEmail("");
+          setPassword("");
+          setPassCheck("");
+          onGetUsers();
+        } else {
+          alert("Не удалось создать пользователя");
+        }
       })
       .catch((error) => {
-      if (error.response && error.response.data) {
-        alert(
-        `Ошибка: ${error.response.status}\n${JSON.stringify(error.response.data)}`
-        );
-      } else {
-        alert(error.message);
-      }
+        ErrorHandler(error);
       });
   };
 
   return (
     <form onSubmit={createUser} className={styleName}>
-         {header ? <p className="form-header">{header}</p> : null}
+      {header ? <p className="form-header">{header}</p> : null}
       <input
         type="text"
         id="usrname"
