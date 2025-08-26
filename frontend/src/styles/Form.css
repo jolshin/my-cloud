@@ -1,7 +1,8 @@
 .form-wrapper {
-  padding-top: 2vh;
+  padding: 2vh;
   margin: auto;
-  width: 400px;
+  width: auto;
+  max-width: 400px;
 }
 
 .form-header {
@@ -39,17 +40,24 @@ form label {
   margin-top: 10px;
 }
 
-form input,
-form textarea {
+form input, form button,
+form textarea,
+#lookUpField, .form-button {
+  padding: 5px;
+  height: 2em;
+  margin: 5px;
+  font-family: "Roboto Flex", sans-serif;
   width: 100%;
   border: 0;
   border-radius: 4px;
   box-sizing: border-box;
   background-color: var(--secondary-color);
   color: var(--text-color);
+  font-size:large;
+  font-weight: 100;
 }
 
-form input[type="submit"] {
+form input[type="submit"], .form-button {
   margin-left: 5px;
   background-color: var(--text-color);
   border: 0;
@@ -69,12 +77,20 @@ form input::file-selector-button {
   border: 0;
   border-radius: 5px;
   color: var(--primary-color);
+  content: "";
+
 }
 
 form input::file-selector-button:hover {
   background-color: var(--button-hover-color);
 }
 
-form input::placeholder {
+form input::placeholder, #lookUpField::placeholder  {
   color: var(--text-color);
 }
+
+form input[type="file"] {
+  padding: 0;
+  height: auto;
+}
+

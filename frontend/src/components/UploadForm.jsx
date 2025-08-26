@@ -73,6 +73,8 @@ export default function UploadForm({ onUpdateFileList, onHide, files }) {
         data ? uploadFile(e) : alert("Выберите файл");
         return;
       case "close":
+        document.getElementById("content").value = "";
+        document.getElementById("description").value = "";
         onHide();
         return;
       case "update_existed":
@@ -88,9 +90,9 @@ export default function UploadForm({ onUpdateFileList, onHide, files }) {
   return (
     <form onSubmit={handleFormAction}>
       <br />
-      <button type="submit" name="close">
+      {/* <button type="submit" name="close">
         <FontAwesomeIcon icon={faXmark} />
-      </button>
+      </button> */}
       <br />
       <input
         type="file"
@@ -101,6 +103,7 @@ export default function UploadForm({ onUpdateFileList, onHide, files }) {
           handleFileChange(e);
         }}
         value={content}
+        placeholder="Выберите файл"
       />
       <br />
       <input

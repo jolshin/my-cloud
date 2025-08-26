@@ -48,7 +48,8 @@ main {
   color: var(--primary-color);
 }
 
-.welcome-wrapper, .not-found-wrapper{
+.welcome-wrapper,
+.not-found-wrapper {
   margin: 20% auto;
   max-width: 500px;
   text-align: center;
@@ -62,6 +63,6 @@ main {
   font-size: 200px;
 }
 
- .not-found-wrapper a {
-  color: var(--text-color)
- }
+.not-found-wrapper a {
+  color: var(--text-color);
+}
