@@ -1,1 +1,1 @@
-# MOX fronted
+# MOX frontend
