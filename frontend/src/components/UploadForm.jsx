@@ -1,11 +1,16 @@
-import UploadFile from "../services/UploadFile";
+// import UploadFile from "../services/UploadFile";
+import useFileUpload from "../services/UploadFile";
 import DeleteFile from "../services/DeleteFile";
+import Loading from "./Loading";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
 export default function UploadForm({ onUpdateFileList, onHide, files }) {
+  const { uploadFile, uploadProgress, isUploading, error, uploadData, reset } =
+    useFileUpload();
+
   const [content, setContent] = useState("");
   const [description, setDescription] = useState("");
   const [data, setData] = useState("");
@@ -13,33 +18,34 @@ export default function UploadForm({ onUpdateFileList, onHide, files }) {
 
   const storageOwnerId = useSelector((state) => state.storage.storageOwnerId);
 
-  const uploadFile = async (e) => {
+  const handleUpload = async (e) => {
     e.preventDefault();
 
     setData((prevData) => {
       prevData.append("description", description);
       prevData.append("owner", storageOwnerId);
-      return prevData;
     });
+
     try {
-      await UploadFile(data);
+      await uploadFile(data);
+    } catch (err) {
+      alert(error);
+    } finally {
       onUpdateFileList();
       setContent("");
       setDescription("");
       setData("");
       setDuplicate(null);
-    } catch (error) {
-      alert(error);
     }
   };
-
+  
   const deleteFile = async (id) => {
     try {
       await DeleteFile(id);
     } catch (error) {
       alert(error);
     }
-  }
+  };
 
   const checkDuplicate = (name) => {
     if (name) {
@@ -70,7 +76,7 @@ export default function UploadForm({ onUpdateFileList, onHide, files }) {
 
     switch (eventName) {
       case "upload":
-        data ? uploadFile(e) : alert("Выберите файл");
+        data ? handleUpload(e) : alert("Выберите файл");
         return;
       case "close":
         document.getElementById("content").value = "";
@@ -79,53 +85,59 @@ export default function UploadForm({ onUpdateFileList, onHide, files }) {
         return;
       case "update_existed":
         deleteFile(duplicate);
-        uploadFile(e)
+        handleUpload(e);
         return;
       case "upload_copy":
-        uploadFile(e);
+        handleUpload(e);
         return;
     }
   };
 
   return (
-    <form onSubmit={handleFormAction}>
-      <br />
-      {/* <button type="submit" name="close">
+    <>
+      {isUploading ? (
+        <progress value={uploadProgress} max="100" />
+      ) : (
+        <form onSubmit={handleFormAction}>
+          <br />
+          {/* <button type="submit" name="close">
         <FontAwesomeIcon icon={faXmark} />
       </button> */}
-      <br />
-      <input
-        type="file"
-        id="content"
-        name="content"
-        onChange={(e) => {
-          setContent(e.target.value);
-          handleFileChange(e);
-        }}
-        value={content}
-        placeholder="Выберите файл"
-      />
-      <br />
-      <input
-        type="text"
-        id="description"
-        name="description"
-        placeholder="Описание"
-        value={description}
-        onChange={(e) => {
-          setDescription(e.target.value);
-        }}
-      />
-      <br />
-      {duplicate ? (
-        <>
-          <span>Файл с данным именем уже хранится в МОХ</span>
-          <input type="submit" name="update_existed" value="Заменить" />
-          <input type="submit" name="upload_copy" value="Оставить оба" />
-        </>
-      ) : (
-        <input type="submit" name="upload" value="Загрузить файл" />
+          <br />
+          <input
+            type="file"
+            id="content"
+            name="content"
+            onChange={(e) => {
+              setContent(e.target.value);
+              handleFileChange(e);
+            }}
+            value={content}
+            placeholder="Выберите файл"
+          />
+          <br />
+          <input
+            type="text"
+            id="description"
+            name="description"
+            placeholder="Описание"
+            value={description}
+            onChange={(e) => {
+              setDescription(e.target.value);
+            }}
+          />
+          <br />
+          {duplicate ? (
+            <>
+              <span>Файл с данным именем уже хранится в МОХ</span>
+              <input type="submit" name="update_existed" value="Заменить" />
+              <input type="submit" name="upload_copy" value="Оставить оба" />
+            </>
+          ) : (
+            <input type="submit" name="upload" value="Загрузить файл" />
+          )}
+        </form>
       )}
-    </form>
+    </>
   );
 }
